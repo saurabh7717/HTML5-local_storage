@@ -34,6 +34,7 @@ Item name
 <input type="button" value="Red" onclick="changeToRed();" />
 <input type="button" value="Blue" onclick="changeToBlue();" />
 <input type="button" value="Green" onclick="changeToGreen();" />
+<input type="button" value="Black" onclick="changeToBlack()" />
 <div id="items"></div>
 
 <script>
@@ -41,10 +42,12 @@ function $(id) { return document.getElementById(id); }
 var host = location.hostname;
 //var myLocalStorage = globalStorage[host]; // firefox 3+
 var myLocalStorage = localStorage; // firefox 3.5+
+var clr = 0;
 
 function writeLocal() {
   var data = $('text').value;
   var itemName = $('item_name').value;
+  data += clr;
   myLocalStorage.setItem(itemName, data);
   updateItemsList();
 }
@@ -56,7 +59,21 @@ function deleteLocal(itemName) {
 
 function readLocal(itemName) {
   $('item_name').value=itemName;
-  $('text').value=myLocalStorage.getItem(itemName);
+  var x = myLocalStorage.getItem(itemName).substr(-1);
+  var y = myLocalStorage.getItem(itemName);
+  $('text').value=myLocalStorage.getItem(itemName).substring(0,y.length - 1);
+  if(x == 1){
+	changeToRed();
+  }
+  else if(x == 2){
+	changeToBlue();
+  }
+  else if(x == 3){
+	changeToGreen();
+  }
+  else{
+	changeToBlack();
+  }
 }
 
 function deleteAll(){
@@ -90,14 +107,22 @@ function updateItemsList() {
 
 function changeToRed(){
 	$('text').style.color = "red";
+	clr = 1;
 }
 
 function changeToBlue(){
 	$('text').style.color = "blue";
+	clr = 2;
 }
 
 function changeToGreen(){
 	$('text').style.color = "green";
+	clr = 3;
+}
+
+function changeToBlack(){
+	$('text').style.color = "black";
+	clr = 0;
 }
 
 window.onload = function() {
